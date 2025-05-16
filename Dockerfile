@@ -40,7 +40,8 @@ RUN --mount=type=cache,target=/root/.ccache \
 
 FROM base AS cuda-11
 ARG CUDA11VERSION=11.3
-RUN dnf install -y cuda-toolkit-${CUDA11VERSION//./-}
+RUN dnf clean all && dnf makecache \
+    && dnf install -y cuda-toolkit-${CUDA11VERSION//./-} --exclude=nsight-compute
 ENV PATH=/usr/local/cuda-11/bin:$PATH
 RUN --mount=type=cache,target=/root/.ccache \
     cmake --preset 'CUDA 11' \
